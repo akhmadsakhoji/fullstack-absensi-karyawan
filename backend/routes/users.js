@@ -7,7 +7,7 @@ const passwordCheck = require('../utils/passwordCheck');
 router.get('/', async (req, res) => {
     const users = await UsersModel.findAll();
     res.status(200).json({
-        data: users,
+        registered: users,
         metadata: "test get user endpoint"
     });
 });
@@ -21,7 +21,7 @@ router.post('/', async (req, res) => {
     });
 
     res.status(200).json({
-        data: users,
+        registered: users,
         metadata: "test post user endpoint"
     });
 });
@@ -43,28 +43,31 @@ router.put('/', async (req, res) => {
         res.status(200).json({
             users: { updated: users[0] },
             metadata: "user updated!"
-        })
+        });
     } else {
         res.status(400).json({
             error: "data invalid"
-        })
+        });
     }
 });
 
 router.post('/login', async (req, res) => {
     const { nip, password } = req.body;
-    const check = await passwordCheck(nip, password);
 
-    if(check.compare === true){
-        res.status(200).json({
-            users: check.userData,
-            metadata: "login success"
-        })
-    } else {
+    try {
+        const check = await passwordCheck(nip, password);
+    
+        if(check.compare === true){
+            res.status(200).json({
+                users: check.userData,
+                metadata: "login success"
+            });
+        }
+    } catch (error) {
         res.status(400).json({
             error: "data invalid"
-        })
+        });
     }
-})
+});
 
 module.exports = router;
