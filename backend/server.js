@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const sequlize = require("./db.config");
 const app = express();
-const port = 3000;
+const port = 3200;
 
 //bikin database
 const userEndpoint = require('./routes/users');
